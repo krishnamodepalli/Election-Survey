@@ -1,5 +1,6 @@
 import CrossChart from "./components/CrossChart.jsx";
 import Toggle from "./components/Toggle.jsx";
+import SurveryForm from "./components/SurveyForm.jsx";
 
 import { AgeWisePartyVotes } from "./utils/AgeWisePartyVotes.js";
 
@@ -11,35 +12,39 @@ function App() {
     TDP: new AgeWisePartyVotes(124, 2128, 21983, 12038),
     JSP: new AgeWisePartyVotes(2893, 3897, 8942, 97428),
     BJP: new AgeWisePartyVotes(2893, 2128, 21983, 12038),
-  }
+  };
   const [stateData, useData] = useState(data);
   const [isPercentage, setIsPercentage] = useState(false);
 
   const changeData = () => {
     if (data.YCP.sum() === stateData.YCP.sum()) {
       const newData = {};
-      Object.keys(data).forEach(party => {
+      Object.keys(data).forEach((party) => {
         newData[party] = new AgeWisePartyVotes(
-            Math.round((data[party].teens / data[party].sum()) * 100),
-            Math.round((data[party].youngsters / data[party].sum()) * 100),
-            Math.round((data[party].adults / data[party].sum()) * 100),
-            Math.round((data[party].seniors / data[party].sum()) * 100));
+          Math.round((data[party].teens / data[party].sum()) * 100),
+          Math.round((data[party].youngsters / data[party].sum()) * 100),
+          Math.round((data[party].adults / data[party].sum()) * 100),
+          Math.round((data[party].seniors / data[party].sum()) * 100)
+        );
       });
       useData(newData);
       setIsPercentage(true);
-    }
-    else {
+    } else {
       useData(data);
       setIsPercentage(false);
     }
   };
   return (
-      <>
-        <CrossChart title="% of Votes from each age group" data={stateData}
-                    isPercentage={isPercentage} />
-        <Toggle onToggle={changeData} />
-      </>
+    <>
+      <CrossChart
+        title="% of Votes from each age group"
+        data={stateData}
+        isPercentage={isPercentage}
+      />
+      <Toggle onToggle={changeData} />
+      <SurveryForm />
+    </>
   );
 }
 
-export default App
+export default App;

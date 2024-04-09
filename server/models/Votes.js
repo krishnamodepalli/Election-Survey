@@ -24,14 +24,15 @@ const votesScheme = new mongoose.Schema({
 
 
 // Static methods of the schema
-votesScheme.statics.castAnonymousVote = function (party) {
+votesScheme.statics.castAnonymousVote = async function (party) {
   party = party.toUpperCase();
+  let doc;
   if (party === 'JSP' || 'TDP' || 'YCP' || 'BJP' || 'INC') {
-    this.create({ voteFor: party, castedAt: Date.now(), anonymous: true });
+    doc = await this.create({ voteFor: party, castedAt: Date.now(), anonymous: true });
   } else {
     throw new Error('This party doesn\'t exist.');
   }
-  return { status: 'ok', msg: 'Vote Casted Successfully' };
+  return { status: 'ok', msg: 'Vote Casted Successfully', doc };
 };
 
 votesScheme.statics.castVote = function (party, ageGroup, constituency) {
