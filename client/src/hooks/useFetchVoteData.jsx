@@ -2,10 +2,9 @@
 // we need to fetch the voting data
 import { useEffect } from "react";
 
-const useFetchVoteData = async () => {
+const useFetchVoteData = () => {
   // this custom hook will fetch the data and return the data
-  let result = {};
-  await useEffect(() => {
+  useEffect(() => {
     // fetch the data
     fetch('https://es-backend-dcxu.onrender.com/data/vote-stats/').then((response) => {
       response.json().then((data) => {
@@ -13,7 +12,6 @@ const useFetchVoteData = async () => {
       });
     });
   }, []);
-  return result;
 };
 
 export default  useFetchVoteData;
