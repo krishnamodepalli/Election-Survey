@@ -43,7 +43,15 @@ votesScheme.statics.castVote = function (party, ageGroup, constituency) {
     throw new Error('Unable to cast your vote!!');
   }
   return { status: 'ok', msg: 'Vote Casted Successfully' };
-}
+};
+
+
+votesScheme.method('convertToSemi', function(ageGroup, constituency){
+  this.ageGroup = ageGroup;
+  this.constituency = constituency;
+  this.anonymous = false;
+  this.save();
+});
 
 
 // stats updating methods

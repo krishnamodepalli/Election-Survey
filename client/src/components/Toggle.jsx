@@ -1,6 +1,6 @@
 import './Toggle.css';
 
-const Toggle = ({ onToggle = () => null}) => {
+const Toggle = ({onToggle = () => null}) => {
   const toggle = (event) => {
     const target = event.target;
     const parent = target.parentElement;
@@ -15,7 +15,8 @@ const Toggle = ({ onToggle = () => null}) => {
     onToggle();
   }
   return (
-      <table className="toggle-wrapper" >
+      <table className="toggle-wrapper">
+        <tbody>
         <tr>
           <td colSpan={2} align={"center"}>
             <div className="toggle-container left-enabled">
@@ -27,8 +28,9 @@ const Toggle = ({ onToggle = () => null}) => {
           <td>Dark</td>
           <td>Light</td>
         </tr>
+        </tbody>
       </table>
   );
-}
+};
 
 export default Toggle;

@@ -41,3 +41,15 @@ app.post('/cast', async (req, res) => {
     res.status(401).json({ err: 'Unable to cast your vote!!' });
   }
 });
+
+// updating or converting the vote into semi-verified vote
+app.post('cast/convert', async (req, res) => {
+  const id = req.body.id;
+  const ageGroup = req.body.ageGroup;
+  const constituency = req.body.constituency;
+
+  // finding the cast vote document
+  const vote = await Votes.findById(id);
+  vote.convertToSemi(ageGroup, constituency);
+  res.send('Successfully updated your vote!');
+});
