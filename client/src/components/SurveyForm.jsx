@@ -67,7 +67,7 @@ const SurveyForm = () => {
       // if success, then just cast the vote
     } else party = team;
 
-    fetch("http://localhost:8080/cast/", {
+    fetch("https://es-backend-dcxu.onrender.com/cast", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

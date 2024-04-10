@@ -7,7 +7,7 @@ const useFetchVoteData = async () => {
   let result = {};
   await useEffect(() => {
     // fetch the data
-    fetch('http://localhost:8080/data/vote-stats/').then((response) => {
+    fetch('https://es-backend-dcxu.onrender.com/data/vote-stats/').then((response) => {
       response.json().then((data) => {
         window.localStorage.setItem('votes', JSON.stringify(data.data));
       });
