@@ -10,20 +10,7 @@ import tjbSymbol from "../assets/tjb-symbol.jpeg";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
-const SurveyForm = () => {
-  // check if already a vote is casted in this device
-  const [alreadyDone, setAlreadyDone] = useState(false);
-  useEffect(() => {
-    if (window.localStorage.getItem('doc')) {
-      // if found then, we can redirect to another page
-      setAlreadyDone(true);
-      setSuccessMsg("You've already contributed for the survey, Thank you for" +
-          " your valuable response and time. Please check out the results...");
-      setTelSuccessMsg("మీరు ఇప్పటికే సర్వే కోసం సహకరించారు, మీ విలువైన" +
-          " ప్రతిస్పందన మరియు సమయానికి ధన్యవాదాలు. దయచేసి ఫలితాలను చూడండి...");
-    }
-  }, []);
-
+const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
   const [error, setError] = useState("");
   const [telError, setTelError] = useState("");
   const [tjbError, setTjbError] = useState("");
@@ -32,19 +19,30 @@ const SurveyForm = () => {
   const [successMsg, setSuccessMsg] = useState("");
   const [telSuccessMsg, setTelSuccessMsg] = useState("");
 
+  // if the user already voted in this device
+  useEffect(() => {
+    if (alreadyVoted) {
+      setSuccessMsg("Thank you for  your valuable response. Please" +
+          " check out the results...");
+      setTelSuccessMsg("మీ విలువైన స్పందనకు ధన్యవాదాలు. దయచేసి ఫలితాలను చూడండి...");
+    }
+  }, [alreadyVoted]);
+
   const expandOptions = () => {
-    if (alreadyDone) return;
+    if (alreadyVoted) return;
     let card = document.getElementById("tjb-team-card");
-    card.style.height = "19rem";
+    card.style.height = "20rem";
   };
   const closeExpand = () => {
     let card = document.getElementById("tjb-team-card");
     card.style.height = "3rem";
   };
-  const saveToLocal = (doc) => {
+  const saveToLocal = (doc, voteNo) => {
     window.localStorage.setItem("doc", JSON.stringify(doc));
+    // also save the vote no.
+    window.localStorage.setItem('voteNo', voteNo);
   };
-  const castVote = async () => {
+  const castVote = () => {
     setIsLoading(true);
     // we will gather all the data in here and set any errors and then save to the local storage
     let team = document.voteForm.vote.value;
@@ -67,7 +65,8 @@ const SurveyForm = () => {
       // if success, then just cast the vote
     } else party = team;
 
-    fetch("https://es-backend-dcxu.onrender.com/cast", {
+    // fetch("https://es-backend-dcxu.onrender.com/cast", {
+    fetch("http://localhost:8080/cast", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,12 +76,18 @@ const SurveyForm = () => {
       if (res.ok) {
         res.json().then((data) => {
           const doc = data.doc;
-          saveToLocal(doc);
+          const voteNo = data.voteNo;
+          saveToLocal(doc, voteNo);
           setSuccessMsg("Successfully casted your vote.");
+          setTelSuccessMsg("మీ ఓటు విజయవంతంగా వేయబడింది");
+          // after a successful vote, we need to show the results page
+          setAlreadyDone(true);
         });
       }
       // we have to set the isLoading even if the result is ok or not too.
       setIsLoading(false);
+      setAlreadyVoted(true);
+      closeExpand();
     });
 
     setTjbError("");
@@ -90,175 +95,175 @@ const SurveyForm = () => {
   };
 
   return (
-      <div className="back">
-        <div className="card">
-          <form
-              id="voteForm"
-              action="#"
-              name="voteForm"
-              onSubmit={(e) => {
-                e.preventDefault();
-                castVote();
-              }}
+      <div className="form-card" onClick={onClick}>
+        <form
+            id="voteForm"
+            action="#"
+            name="voteForm"
+            onSubmit={(e) => {
+              e.preventDefault();
+              castVote();
+            }}
+        >
+
+          <p className="ques english mandatory">
+            Which party do you support in your constituency for the 2024
+            ELECTIONS?
+          </p>
+          <p className="ques telugu mandatory">
+            2024 ఎన్నికలకు మీ నియోజకవర్గంలో మీరు ఏ పార్టీకి మద్దతు ఇస్తారు?
+          </p>
+          <input
+              className="party-option"
+              type="radio"
+              name="vote"
+              id="ycp-team"
+              value="ycp"
+              disabled={alreadyVoted}
+          />
+          <label className="team-card" htmlFor="ycp-team"
+                 onClick={closeExpand}>
+            <div className="team-brand">
+              YSRCP
+              <img
+                  className="party-symbol"
+                  src={ycpSymbol}
+                  alt="YCP party symbol"
+              />
+            </div>
+          </label>
+          <br/>
+          <input
+              className="party-option"
+              type="radio"
+              name="vote"
+              id="tjb-team"
+              value="tjb"
+              disabled={alreadyVoted}
+          />
+          <label
+              className="team-card"
+              id="tjb-team-card"
+              htmlFor="tjb-team"
+              onClick={expandOptions}
           >
-            <p className="ques english mandatory">
-              Which party do you support in your constituency for the 2024
-              ELECTIONS?
-            </p>
-            <p className="ques telugu mandatory">
-              2024 ఎన్నికలకు మీ నియోజకవర్గంలో మీరు ఏ పార్టీకి మద్దతు ఇస్తారు?
-            </p>
-            <input
-                className="party-option"
-                type="radio"
-                name="vote"
-                id="ycp-team"
-                value="ycp"
-                disabled={alreadyDone}
-            />
-            <label className="team-card" htmlFor="ycp-team"
-                   onClick={closeExpand}>
-              <div className="team-brand">
-                YSRCP
+            <div className="team-brand" id="tjb-opt">
+              TDP + JSP + BJP
+              <img
+                  src={tjbSymbol}
+                  alt="TDP + JSP + BJP combined party symbol"
+                  className="party-symbol"
+              />
+            </div>
+            <form name="expandedForm" className="expanded-card">
+              <hr/>
+              <p className="ques mandatory english">Please specify?</p>
+              <p className="mandatory-error">{tjbError}</p>
+              <p className="telugu mandatory-error">{teluguTJBError}</p>
+              <br/>
+              <input
+                  type="radio"
+                  name="tjbVote"
+                  id="tdp-tjb"
+                  value="tdp"
+                  onChange={() => {
+                    setTjbError("");
+                    setTeluguTJBError("");
+                  }}
+              />
+              <label className="specified-opt" htmlFor="tdp-tjb">
+                TDP
                 <img
-                    className="party-symbol"
-                    src={ycpSymbol}
-                    alt="YCP party symbol"
-                />
-              </div>
-            </label>
-            <br/>
-            <input
-                className="party-option"
-                type="radio"
-                name="vote"
-                id="tjb-team"
-                value="tjb"
-                disabled={alreadyDone}
-            />
-            <label
-                className="team-card"
-                id="tjb-team-card"
-                htmlFor="tjb-team"
-                onClick={expandOptions}
-            >
-              <div className="team-brand" id="tjb-opt">
-                TDP + JSP + BJP
-                <img
-                    src={tjbSymbol}
-                    alt="TDP + JSP + BJP combined party symbol"
+                    src={tdpSymbol}
+                    alt="TDP party Symbol"
                     className="party-symbol"
                 />
-              </div>
-              <form name="expandedForm" className="expanded-card">
-                <hr/>
-                <p className="ques mandatory english">Please specify?</p>
-                <p className="mandatory-error">{tjbError}</p>
-                <p className="telugu mandatory-error">{teluguTJBError}</p>
-                <br/>
-                <input
-                    type="radio"
-                    name="tjbVote"
-                    id="tdp-tjb"
-                    value="tdp"
-                    onChange={() => {
-                      setTjbError("");
-                      setTeluguTJBError("");
-                    }}
-                />
-                <label className="specified-opt" htmlFor="tdp-tjb">
-                  TDP
-                  <img
-                      src={tdpSymbol}
-                      alt="TDP party Symbol"
-                      className="party-symbol"
-                  />
-                </label>
-                <br/>
-                <br/>
-                <input
-                    type="radio"
-                    name="tjbVote"
-                    id="jsp-tjb"
-                    value="jsp"
-                    onChange={() => {
-                      setTjbError("");
-                      setTeluguTJBError("");
-                    }}
-                />
-                <label className="specified-opt" htmlFor="jsp-tjb">
-                  JSP
-                  <img
-                      src={jspSymbol}
-                      alt="JSP party Symbol"
-                      className="party-symbol"
-                  />
-                </label>
-                <br/>
-                <br/>
-                <input
-                    type="radio"
-                    name="tjbVote"
-                    id="bjp-tjb"
-                    value="bjp"
-                    onChange={() => {
-                      setTjbError("");
-                      setTeluguTJBError("");
-                    }}
-                />
-                <label className="specified-opt" htmlFor="bjp-tjb">
-                  BJP
-                  <img
-                      src={bjpSymbol}
-                      alt="BJP party Symbol"
-                      className="party-symbol"
-                  />
-                </label>
-                <br/>
-                <br/>
-              </form>
-            </label>
-            <br/>
-            <input
-                className="party-option"
-                type="radio"
-                name="vote"
-                id="inc-team"
-                value="inc"
-                disabled={alreadyDone}
-            />
-            <label className="team-card" htmlFor="inc-team"
-                   onClick={closeExpand}>
-              <div className="team-brand">
-                INC
+              </label>
+              <br/>
+              <br/>
+              <input
+                  type="radio"
+                  name="tjbVote"
+                  id="jsp-tjb"
+                  value="jsp"
+                  onChange={() => {
+                    setTjbError("");
+                    setTeluguTJBError("");
+                  }}
+              />
+              <label className="specified-opt" htmlFor="jsp-tjb">
+                JSP
                 <img
+                    src={jspSymbol}
+                    alt="JSP party Symbol"
                     className="party-symbol"
-                    src={incSymbol}
-                    alt="INC party symbol"
                 />
-              </div>
-            </label>
-            <br/>
-            <button type="submit" id="voteBtn"
-                    disabled={isLoading || alreadyDone}>
-              {
-                isLoading ? "Voting..." : "Vote"
-              }
-            </button>
-            <p className="english error">{error}</p>
-            <p className="telugu error">{telError}</p>
-            <p className="english success">{successMsg}</p>
-            <p className="telugu success">{telSuccessMsg}</p>
-            <br/>
+              </label>
+              <br/>
+              <br/>
+              <input
+                  type="radio"
+                  name="tjbVote"
+                  id="bjp-tjb"
+                  value="bjp"
+                  onChange={() => {
+                    setTjbError("");
+                    setTeluguTJBError("");
+                  }}
+              />
+              <label className="specified-opt" htmlFor="bjp-tjb">
+                BJP
+                <img
+                    src={bjpSymbol}
+                    alt="BJP party Symbol"
+                    className="party-symbol"
+                />
+              </label>
+              <br/>
+              <br/>
+            </form>
+          </label>
+          <br/>
+          <input
+              className="party-option"
+              type="radio"
+              name="vote"
+              id="inc-team"
+              value="inc"
+              disabled={alreadyVoted}
+          />
+          <label className="team-card" htmlFor="inc-team"
+                 onClick={closeExpand}>
+            <div className="team-brand">
+              INC
+              <img
+                  className="party-symbol"
+                  src={incSymbol}
+                  alt="INC party symbol"
+              />
+            </div>
+          </label>
+          <br/>
+          <button type="submit" id="voteBtn"
+                  disabled={isLoading || alreadyVoted}>
             {
-              alreadyDone ?
-                  <p className="english">show <Link to="/voting-result"
-                                                    className="btn"
-                                                    id="res-btn">Results </Link>
-                  </p> : null
+              isLoading ? "Voting..." : "Vote"
             }
-          </form>
-        </div>
+          </button>
+          <p className="english error">{error}</p>
+          <p className="telugu error">{telError}</p>
+          <p className="english success">{successMsg}</p>
+          <p className="telugu success">{telSuccessMsg}</p>
+          <br/>
+          {
+            alreadyVoted ?
+                <>
+                  <Link to="/extend" id="continue-btn">Continue Survey</Link>
+                  <Link to="/voting-result" id="res-btn">View Results </Link>
+                </>
+                : null
+          }
+        </form>
       </div>
   );
 };

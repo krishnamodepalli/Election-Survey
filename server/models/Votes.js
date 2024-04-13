@@ -24,7 +24,7 @@ const votesScheme = new mongoose.Schema({
 
 
 // Static methods of the schema
-votesScheme.statics.castAnonymousVote = async function (party) {
+votesScheme.statics.castVote = async function (party) {
   party = party.toUpperCase();
   let doc;
   if (party === 'JSP' || 'TDP' || 'YCP' || 'BJP' || 'INC') {
@@ -34,17 +34,6 @@ votesScheme.statics.castAnonymousVote = async function (party) {
   }
   return { status: 'ok', msg: 'Vote Casted Successfully', doc };
 };
-
-votesScheme.statics.castVote = function (party, ageGroup, constituency) {
-  party = party.toUpperCase();
-  if (party === 'JSP' || 'TDP' || 'YCP' || 'BJP' || 'INC') {
-    this.create({ voteFor: party, castedAt: Date.now(), anonymous: false, ageGroup: ageGroup, constituency: constituency });
-  } else {
-    throw new Error('Unable to cast your vote!!');
-  }
-  return { status: 'ok', msg: 'Vote Casted Successfully' };
-};
-
 
 votesScheme.method('convertToSemi', function(ageGroup, constituency){
   this.ageGroup = ageGroup;

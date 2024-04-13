@@ -11,6 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// TODO 1 (feat) count the no. of votes saved into the database
+let voteCount = 0;
+
 // setting routes
 app.use('/admin-panel', adminRoutes);
 app.use('/data', dataRoutes);
@@ -25,20 +28,20 @@ app.listen(port, () => {
 // casting the vote
 app.post('/cast', async (req, res) => {
   const party = req.body.party;
-  const constituency = req.body.constituency;
-  const ageGroup = req.body.ageGroup;
   let doc;
   try {
-    if (!ageGroup && !constituency) {
-      let res = await Votes.castAnonymousVote(party);
-      doc = res.doc;
-    }
-    else
-      Votes.castVote(party, ageGroup, constituency);
-    res.status(201).json({ msg: 'Successfully casted your vote...👍', doc });
+    let response = await Votes.castVote(party);
+    doc = response.doc;
+    if (!voteCount)       // if we do not have the vote count, then we can
+      // get from the database
+      voteCount = await Votes.countDocuments();
+
+    // logging to the console
+    console.log(`New vote casted to ${party}, total of ${++voteCount}.`);
+    res.status(201).json({msg: 'Successfully casted your vote...👍', doc, voteNo: voteCount});
   } catch (e) {
     console.error(e);
-    res.status(401).json({ err: 'Unable to cast your vote!!' });
+    res.status(401).json({err: `Unable to cast your vote!!\nError msg:\n${e}`});
   }
 });
 

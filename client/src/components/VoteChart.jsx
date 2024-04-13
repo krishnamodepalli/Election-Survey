@@ -1,36 +1,21 @@
-import {useEffect} from "react";
+import { useEffect } from "react";
 
-import useFetchVoteData from "../hooks/useFetchVoteData.jsx";
-
-const VoteChart = () => {
-  useFetchVoteData();
+const VoteChart = ({ yAxisLabel, chartData, dataFormat }) => {
   useEffect(() => {
     // Ensure Google Charts library is loaded before drawing the chart
     if (window.google && window.google.charts) {
       drawChart();
-      setData();
     } else {
       console.warn('Google Charts library not loaded. Please ensure it\'s loaded before this component.');
     }
-  }, []);
+  }, [dataFormat]);
 
-  // get the data from localStorage
-  let chartData = [];
-  const setData = () => {
-    const data = JSON.parse(localStorage.getItem("votes"));
-     chartData = [
-      ['Team', 'YCP', {role: 'annotation'}, 'TDP', {role: 'annotation'}, 'JSP', {role: 'annotation'}, 'BJP', {role: 'annotation'}, 'INC', {role: 'annotation'}],
-      ['YCP', data.YCP, data.YCP.toString(), 0, '', 0, '', 0, '', 0, ''],
-      ['TDP + JSP + BJP', 0, '', data.TDP, data.TDP.toString(), data.JSP, data.JSP.toString(), data.BJP, data.BJP.toString(), 0, ''],
-      ['INC', 0, '', 0, '', 0, '', 0, '', data.INC, data.INC.toString()]
-    ];
-  };
-
+  // default chartOptions and will not be changed in this project.
   const chartOptions = {
     title: 'Election Results',
     isStacked: true,
     hAxis: {title: 'Teams'},
-    vAxis: {title: 'Total Votes'},
+    vAxis: {title: yAxisLabel || 'Votes'},
     colors: ['#3366CC', '#f4d100', '#DC3912', '#f4730e', '#118207'], // Customizing colors for each party,
     annotations: {
       textStyle: {
@@ -38,6 +23,11 @@ const VoteChart = () => {
         bold: true,
         color: 'black'
       }
+    },
+    animation: {
+      startup: true,
+      duration: 1000,
+      easing: 'out',
     }
   };
 
@@ -52,10 +42,7 @@ const VoteChart = () => {
   }
 
   return (
-      <div id="chart_div" style={{
-        width: "900px",
-        height: "500px",
-      }}></div>
+      <div id="chart_div" ></div>
   );
 };
 

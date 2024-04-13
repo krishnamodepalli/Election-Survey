@@ -1,23 +1,26 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import SurveyForm from "./components/SurveyForm.jsx";
-import VoteChart from "./components/VoteChart.jsx";
-import useFetchVoteData from "./hooks/useFetchVoteData.jsx";
+import Home from './pages/Home.jsx';
+import ExtendedForm from './pages/ExtendedForm.jsx';
+import Results from './pages/Results.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <SurveyForm />,
+    element: <Home />,
+  },
+  {
+    path: '/extend',
+    element: <ExtendedForm />
   },
   {
     path: '/voting-result',
-    element: <VoteChart />,
+    element: <Results />,
   }
 ]);
 
 function App() {
-  useFetchVoteData();
   return (
       <RouterProvider router={router} />
   );

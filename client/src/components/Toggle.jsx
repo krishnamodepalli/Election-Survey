@@ -1,6 +1,6 @@
 import './Toggle.css';
 
-const Toggle = ({onToggle = () => null}) => {
+const Toggle = ({leftLabel, rightLabel, onToggle = () => null}) => {
   const toggle = (event) => {
     const target = event.target;
     const parent = target.parentElement;
@@ -25,8 +25,8 @@ const Toggle = ({onToggle = () => null}) => {
           </td>
         </tr>
         <tr className="toggle-labels">
-          <td>Dark</td>
-          <td>Light</td>
+          <td>{leftLabel}</td>
+          <td>{rightLabel}</td>
         </tr>
         </tbody>
       </table>

@@ -12,6 +12,7 @@
 }
 body {
   font-family: var(--hanken-font);
+  font-size: 1.2em;     /* this font-size is good enough (still testing) */
 }
 
 .ques {
@@ -27,6 +28,7 @@ body {
 }
 .telugu {
   font-size: 0.9em;
+  font-weight: 600;
   color: var(--secondary-col);
 }
 .english, .telugu {
@@ -37,11 +39,21 @@ body {
 }
 
 .ques.mandatory::after {
-  content: " *";
+  content: "*";
   color: red;
   position: relative;
   font-size: 1em;
   top: -1px;
 }
 
+#chart_div {
+  width: max(500px, 60%);
+  height: 500px;
+}
 
+@media only screen and (max-width: 500px) {
+  #chart_div {
+    width: max(500px, 60%);
+    height: 400px;
+  }
+}
