@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import ordinal from "ordinal";
 
 import VoteChart from "../components/VoteChart.jsx";
 import Toggle from "../components/Toggle.jsx";
@@ -83,16 +82,28 @@ const Results = () => {
               :
               null
         */}
-        <VoteChart yAxisLabel={chartLabel} chartData={chartData} dataFormat={isDataPercent} />
+        <VoteChart yAxisLabel={chartLabel} chartData={chartData}
+                   dataFormat={isDataPercent}/>
         <br/>
         <div className="container">
-        <Toggle leftLabel="Nums" rightLabel="Percent"
-                onToggle={toggleVoteChartData}/>
+          <Toggle leftLabel="Nums" rightLabel="Percent"
+                  onToggle={toggleVoteChartData}/>
         </div>
         <br/>
-        <p className="english">Total Votes Received: <strong>{totalVotes}</strong></p>
-        <p className="english">Anonymous Votes: <strong>{anonymousVotes}</strong></p>
-        <p className="english">Verified Votes: <strong>{verifiedVotes}</strong></p>
+        <p className="english">Total Votes
+          Received: <strong>{totalVotes}</strong></p>
+        <p className="english">Anonymous
+          Votes: <strong>{anonymousVotes}</strong></p>
+        <p className="english">Verified Votes: <strong>{verifiedVotes}</strong>
+        </p>
+        <br/>
+        <p className="english">Please share about our digital survey &ensp;
+          <a id="whatsapp-btn"
+             href="https://api.whatsapp.com/send/?text=https%3A%2F%2Felection-survey-flame.vercel.app%2F%0AThis+is+a+digital-survey+web+application+built+by+CS+Engineering+students+as+a+real-time+project.+We+do+not+support+or+side+with+any+certain+party+in+this+voting+process%2C+We+only+intend+to+provide+a+transparent+platform+for+the+sake+of+accurate+results.%0A%0AElection+Survey%2C+this+is+a+digital+survey+in+which+we+can+vote+for+our+preferred+party+in+our+upcoming+AP+2024+Elections.+Check+out+the+results+of+the+survey%2C+showing+the+numbers+and+votes.%0A%0AThank+you+for+your+contribution...%E2%9D%A4%F0%9F%99%8F&type=custom_url&app_absent=0"
+             target="_blank">
+            <i className="fa-brands fa-square-whatsapp fa-2xl"></i>
+          </a>
+        </p>
       </div>
   );
 };

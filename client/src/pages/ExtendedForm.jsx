@@ -4,6 +4,8 @@ import {Link, Navigate} from 'react-router-dom';
 import './ExtendedForm.css';
 
 const ExtendedForm = () => {
+  const server_URL = import.meta.env.VITE_APP_SERVER_URL;
+
   const doc = JSON.parse(window.localStorage.getItem('doc'));
   if (!doc.anonymous)
     return <Navigate to="/"/>;
@@ -29,7 +31,7 @@ const ExtendedForm = () => {
     }
 
     // now send the POST request
-    fetch('https://es-backend-dcxu.onrender.com/cast/convert', {
+    fetch(server_URL + '/cast/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

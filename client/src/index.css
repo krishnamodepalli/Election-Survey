@@ -47,6 +47,9 @@ body {
   font-size: 1em;
   top: -1px;
 }
+#whatsapp-btn {
+  color: #25D366;
+}
 
 .container {
   display: flex;

@@ -11,6 +11,7 @@ import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
 const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
+  const server_URL = import.meta.env.VITE_APP_SERVER_URL;
   const [error, setError] = useState("");
   const [telError, setTelError] = useState("");
   const [tjbError, setTjbError] = useState("");
@@ -70,7 +71,7 @@ const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
       // if success, then just cast the vote
     } else party = team;
 
-    fetch("https://es-backend-dcxu.onrender.com/cast", {
+    fetch(server_URL + "/cast", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

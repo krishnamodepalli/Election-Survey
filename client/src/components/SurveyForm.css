@@ -144,6 +144,7 @@ img.party-symbol {
     display: none;
 }
 #res-btn {
+    color: #771f84;
     white-space: nowrap;
     margin: 0 3rem 1rem .5rem;
 }

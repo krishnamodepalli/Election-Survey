@@ -53,6 +53,8 @@ app.post('/cast/convert', async (req, res) => {
 
   // finding the cast vote document
   const vote = await Votes.findById(id);
+  if (!vote.anonymous)
+    res.status(200).json({'msg': 'Vote already verified'});
   vote.convertToSemi(ageGroup, constituency);
   console.log('Successfully convert an anonymous vote of id', id);
   res.status(200).json({msg: 'Successfully converted the vote', doc: vote});
