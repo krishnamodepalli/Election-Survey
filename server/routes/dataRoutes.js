@@ -18,8 +18,8 @@ router.get('/vote-stats', async (req, res) => {
     // will be using some more efficient way than making multiple requests
     await Votes.find({ }).then(votes => {
       // now divide the votes
-      const semi_verified = votes.filter(vote => vote.anonymous);
-      const anonymous = votes.filter(vote => !vote.anonymous);
+      const semi_verified = votes.filter(vote => !vote.anonymous);
+      const anonymous = votes.filter(vote => vote.anonymous);
       let an_total = 0;
       let sv_total = 0;
       for (const party of parties) {
