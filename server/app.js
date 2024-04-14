@@ -46,7 +46,7 @@ app.post('/cast', async (req, res) => {
 });
 
 // updating or converting the vote into semi-verified vote
-app.post('cast/convert', async (req, res) => {
+app.post('/cast/convert', async (req, res) => {
   const id = req.body.id;
   const ageGroup = req.body.ageGroup;
   const constituency = req.body.constituency;
@@ -54,5 +54,6 @@ app.post('cast/convert', async (req, res) => {
   // finding the cast vote document
   const vote = await Votes.findById(id);
   vote.convertToSemi(ageGroup, constituency);
-  res.send('Successfully updated your vote!');
+  console.log('Successfully convert an anonymous vote of id', id);
+  res.status(200).json({msg: 'Successfully converted the vote', doc: vote});
 });

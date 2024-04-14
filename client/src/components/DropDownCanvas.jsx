@@ -1,12 +1,13 @@
 import './DropDownCanvas.css';
 
-export function closeCanvas () {
+export function closeCanvas() {
   // getting the canvas
   const canvas = document.getElementsByClassName('dropdown-canvas')[0];
-  canvas.style.top = "-100%";
+  if (canvas.style)
+    canvas.style.top = "-100%";
 }
 
-export default function DropDownCanvas({ children }) {
+export default function DropDownCanvas({children}) {
   return (
       <div className="dropdown-canvas">
         {/* this will have a small btn to toggle the canvas */}

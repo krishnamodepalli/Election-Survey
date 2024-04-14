@@ -8,16 +8,16 @@
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     border-radius: 30px;
-    box-shadow: 2px 2px 3px #747bff, inset 2px 2px 0 #747bff;
+    box-shadow: 2px 2px 3px #3A435E, inset 2px 2px 0 #3A435E;
     transition: all ease-in-out 300ms;
 }
 .toggle-container.left-enabled {
     /* change parent styles on left toggled */
-    background-color: #25291C;
+    background-color: #F2F4F3;
 }
 .toggle-container.right-enabled {
     /* change parent styles on right toggled */
-    background-color: #BDC2BF;
+    background-color: #F2F4F3;
 }
 
 /* Toggler default Styles */
@@ -36,17 +36,16 @@
 .toggle-left {
     /* toggler styles on left */
     left: 5px;
-    background-color: #BDC2BF;              /* toggle left background color */
+    background-color: #05668D;              /* toggle left background color */
     transition: all ease-in-out 300ms;
 }
 .toggle-right {
     /* toggler styles on right */
     left: 43px;
-    background-color: #25291C;              /* toggle right background color */
+    background-color: #D8315B;              /* toggle right background color */
     transition: all ease-in-out 300ms;
 }
 .toggle-labels > td {
     padding: 0 1rem;
     font-weight: bold;
-    font-size: 1.3em;
 }

@@ -11,6 +11,10 @@ const Results = () => {
   const [chartLabel, setChartLabel] = useState("Votes in Numbers");
   const [isDataPercent, setIsDataPercent] = useState(true);
 
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [anonymousVotes, setAnonymousVotes] = useState(0);
+  const [verifiedVotes, setVerifiedVotes] = useState(0);
+
   const setDefaultData = () => {
     const data = JSON.parse(localStorage.getItem("votes"));
     setChartData([
@@ -44,6 +48,12 @@ const Results = () => {
     // TODO 2 Get the data from the localStorage and send it to the VoteChart
     toggleVoteChartData();
     // TODO 3 Get the voteNo from localStorage and send it to the Results
+    const votesData = JSON.parse(localStorage.getItem("votes"));
+    const diff_votes = JSON.parse(localStorage.getItem("diff-votes"));
+    const age_wise_votes = JSON.parse(localStorage.getItem("age-wise-votes"));
+    setTotalVotes(votesData.total);
+    setAnonymousVotes(diff_votes.anonymous.total);
+    setVerifiedVotes(diff_votes.semi_verified.total);
     const voteNo = parseInt(window.localStorage.getItem("voteNo"));
     if (voteNo)
       setVoteNo(voteNo);
@@ -58,10 +68,10 @@ const Results = () => {
   };
 
   return (
-      <>
+      <div id="result-page">
         {/* display the voteNo of the user on the results page and also the
          total no. of votes received until now. */}
-        {
+        {/*
           voteNo ?
               <>
                 <p className="english" id="voteNo">You are
@@ -72,13 +82,18 @@ const Results = () => {
               </>
               :
               null
-        }
+        */}
         <VoteChart yAxisLabel={chartLabel} chartData={chartData} dataFormat={isDataPercent} />
-        <h3>Show results in : </h3>
         <br/>
+        <div className="container">
         <Toggle leftLabel="Nums" rightLabel="Percent"
                 onToggle={toggleVoteChartData}/>
-      </>
+        </div>
+        <br/>
+        <p className="english">Total Votes Received: <strong>{totalVotes}</strong></p>
+        <p className="english">Anonymous Votes: <strong>{anonymousVotes}</strong></p>
+        <p className="english">Verified Votes: <strong>{verifiedVotes}</strong></p>
+      </div>
   );
 };
 

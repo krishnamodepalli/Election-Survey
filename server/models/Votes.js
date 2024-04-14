@@ -28,14 +28,23 @@ votesScheme.statics.castVote = async function (party) {
   party = party.toUpperCase();
   let doc;
   if (party === 'JSP' || 'TDP' || 'YCP' || 'BJP' || 'INC') {
-    doc = await this.create({ voteFor: party, castedAt: Date.now(), anonymous: true });
+    doc = await this.create({
+      voteFor: party,
+      castedAt: Date.now(),
+      anonymous: true
+    });
   } else {
     throw new Error('This party doesn\'t exist.');
   }
-  return { status: 'ok', msg: 'Vote Casted Successfully', doc };
+  return {status: 'ok', msg: 'Vote Casted Successfully', doc};
 };
 
-votesScheme.method('convertToSemi', function(ageGroup, constituency){
+votesScheme.method('convertToSemi', async function (ageGroup, constituency) {
+  // also update the party stats
+  const partyDoc = await PartyStats.findOne({ party_name: this.voteFor });
+  partyDoc.anonymous_votes -= 1;
+  partyDoc.semi_verified_votes += 1;
+  partyDoc.save();
   this.ageGroup = ageGroup;
   this.constituency = constituency;
   this.anonymous = false;
@@ -46,8 +55,8 @@ votesScheme.method('convertToSemi', function(ageGroup, constituency){
 // stats updating methods
 const updatePartyStats = (party, anonymous, doc) => {
   if (doc) {
-    if (anonymous)  doc.anonymous_votes += 1;
-    else            doc.semi_verified_votes += 1;
+    if (anonymous) doc.anonymous_votes += 1;
+    else doc.semi_verified_votes += 1;
     return;
   }
   // if already a document is present
@@ -84,26 +93,25 @@ const updateAgeStats = (party, ageGroup, doc) => {
 
 
 // Middlewares for the stats
-votesScheme.post('save', async function(res, next) {
+votesScheme.post('save', async function (res, next) {
   // saving the new data into the stats
   // getting the document
   const party = this.voteFor;
 
   // Party Stats addition
-  const psDoc = await PartyStats.findOne({ party_name: party });
-  const ageDoc = await AgeGroupStats.findOne({ party_name: party });
+  const psDoc = await PartyStats.findOne({party_name: party});
+  const ageDoc = await AgeGroupStats.findOne({party_name: party});
 
   updatePartyStats(party, this.anonymous, psDoc);
   if (!this.anonymous)         // if anonymous
-    // we do not add the age group statistics or modify for an anonymous vote
+      // we do not add the age group statistics or modify for an anonymous vote
     updateAgeStats(party, this.ageGroup, ageDoc);
-  
-  if (psDoc)    psDoc.save();
-  if (ageDoc)   ageDoc.save();
+
+  if (psDoc) psDoc.save();
+  if (ageDoc) ageDoc.save();
 
   next();
 });
-
 
 
 module.exports = mongoose.model('Votes', votesScheme);

@@ -5,13 +5,16 @@ import { useState, useEffect } from "react";
 
 const HomePage = () => {
   const [alreadyVoted, setAlreadyVoted] = useState(false);
+  const [onlyResults, setOnlyResults] = useState(false);
 
   useEffect(() => {
-    if (window.localStorage.getItem('doc')) {
+    const doc = JSON.parse(window.localStorage.getItem('doc'));
+    if (doc) {
       setAlreadyVoted(true);
       // TODO Also check if the document is valid or not.
+      if (!doc.anonymous)
+        setOnlyResults(true);
       closeCanvas();
-      // if found then, we can redirect to another page
     } else {  // saying that this session to the user is fresh, or first time.
       // we need to bring down a canvas showing the disclaimer of the survey.
       setTimeout(() => {
@@ -33,7 +36,7 @@ const HomePage = () => {
             ఇది కేవలం కొంతమంది ఇంజినీరింగ్ కళాశాల విద్యార్థులు సమిష్టిగా అభివృద్ధి చేసారు,
             వెబ్ అప్లికేషన్‌ అభివృద్ధి చేయడంలో కొంత అనుభవాన్ని పొందడం కోసం మాత్రమే చేసారు.
           </p>
-          <br/><br/>
+          <br/>
           <p className="english">
             We do not support or side with a certain party in this elections,
             but only developed a very transparent platform to conduct a
@@ -44,7 +47,7 @@ const HomePage = () => {
             డిజిటల్-సర్వే నిర్వహించడానికి చాలా పారదర్శక వేదికను మాత్రమే అభివృద్ధి చేసాము
           </p>
         </DropDownCanvas>
-        <SurveyForm alreadyVoted={alreadyVoted} />
+        <SurveyForm onlyResults={onlyResults} alreadyVoted={alreadyVoted} setAlreadyVoted={setAlreadyVoted} />
       </>
   );
 };

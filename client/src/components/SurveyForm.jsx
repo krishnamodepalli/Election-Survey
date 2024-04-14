@@ -10,7 +10,7 @@ import tjbSymbol from "../assets/tjb-symbol.jpeg";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
-const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
+const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
   const [error, setError] = useState("");
   const [telError, setTelError] = useState("");
   const [tjbError, setTjbError] = useState("");
@@ -18,6 +18,7 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [telSuccessMsg, setTelSuccessMsg] = useState("");
+  const [voteTypeWarning, setVoteTypeWarning] = useState("");
 
   // if the user already voted in this device
   useEffect(() => {
@@ -25,6 +26,9 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
       setSuccessMsg("Thank you for  your valuable response. Please" +
           " check out the results...");
       setTelSuccessMsg("మీ విలువైన స్పందనకు ధన్యవాదాలు. దయచేసి ఫలితాలను చూడండి...");
+      if (!onlyResults)
+        setVoteTypeWarning("Please continue the survey, your vote will be" +
+            " considered verified, if not it will be counted anonymous");
     }
   }, [alreadyVoted]);
 
@@ -35,7 +39,8 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
   };
   const closeExpand = () => {
     let card = document.getElementById("tjb-team-card");
-    card.style.height = "3rem";
+    if (card.style)
+      card.style.height = "3rem";
   };
   const saveToLocal = (doc, voteNo) => {
     window.localStorage.setItem("doc", JSON.stringify(doc));
@@ -65,8 +70,7 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
       // if success, then just cast the vote
     } else party = team;
 
-    // fetch("https://es-backend-dcxu.onrender.com/cast", {
-    fetch("http://localhost:8080/cast", {
+    fetch("https://es-backend-dcxu.onrender.com/cast", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +85,7 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
           setSuccessMsg("Successfully casted your vote.");
           setTelSuccessMsg("మీ ఓటు విజయవంతంగా వేయబడింది");
           // after a successful vote, we need to show the results page
-          setAlreadyDone(true);
+          setAlreadyVoted(true);
         });
       }
       // we have to set the isLoading even if the result is ok or not too.
@@ -95,7 +99,7 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
   };
 
   return (
-      <div className="form-card" onClick={onClick}>
+      <div className="form-card">
         <form
             id="voteForm"
             action="#"
@@ -105,7 +109,6 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
               castVote();
             }}
         >
-
           <p className="ques english mandatory">
             Which party do you support in your constituency for the 2024
             ELECTIONS?
@@ -258,12 +261,16 @@ const SurveyForm = ({onClick, alreadyVoted, setAlreadyVoted}) => {
           {
             alreadyVoted ?
                 <>
-                  <Link to="/extend" id="continue-btn">Continue Survey</Link>
-                  <Link to="/voting-result" id="res-btn">View Results </Link>
+                  <Link to="/extend" id={onlyResults ? 'hide' : "continue-btn"}>Continue
+                    Survey</Link>
+                  <Link to="/voting-result" id={onlyResults ? "continue-btn" :
+                      "res-btn"}>View Results </Link>
                 </>
                 : null
           }
         </form>
+        <br/>
+        <p className="english warn">{voteTypeWarning}</p>
       </div>
   );
 };

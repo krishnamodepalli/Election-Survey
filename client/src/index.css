@@ -12,7 +12,7 @@
 }
 body {
   font-family: var(--hanken-font);
-  font-size: 1.2em;     /* this font-size is good enough (still testing) */
+  font-size: 1.15em;     /* this font-size is good enough (still testing) */
 }
 
 .ques {
@@ -23,7 +23,6 @@ body {
   color: var(--primary-col);
 }
 .english {
-  font-style: 1.2em;
   color: var(--primary-col);
 }
 .telugu {
@@ -37,13 +36,30 @@ body {
 .error {
   color: red;
 }
-
+.warn {
+  color: #A14A2B;
+  font-size: .9rem;
+}
 .ques.mandatory::after {
   content: "*";
   color: red;
   position: relative;
   font-size: 1em;
   top: -1px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+.english strong {
+  font-size: 1.3rem;
+}
+
+#result-page {
+  .english {
+    margin: 0 1rem;
+  }
 }
 
 #chart_div {
@@ -53,7 +69,7 @@ body {
 
 @media only screen and (max-width: 500px) {
   #chart_div {
-    width: max(500px, 60%);
-    height: 400px;
+    width: min(500px, 100%);
+    height: min(400px, 50vh);
   }
 }
