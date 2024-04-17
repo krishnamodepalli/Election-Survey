@@ -59,3 +59,5 @@ app.post('/cast/convert', async (req, res) => {
   console.log('Successfully convert an anonymous vote of id', id);
   res.status(200).json({msg: 'Successfully converted the vote', doc: vote});
 });
+
+module.exports = app;
