@@ -65,6 +65,7 @@ const ExtendedForm = () => {
           <p className="telugu ques mandatory">దయచేసి మీ నియోజకవర్గాన్ని
             ఎంచుకోండి.</p>
           <select id="sel-constituency" name="constituency" required>
+<option value="other-state">Other State</option>
             <optgroup label="Anantapur">
               <option value="" disabled selected hidden> --SELECT--
               </option>
