@@ -36,13 +36,13 @@ const VoteChart = ({ yAxisLabel, chartData, dataFormat }) => {
     google.charts.setOnLoadCallback(function () {
       var data = google.visualization.arrayToDataTable(chartData);
 
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      var chart = new google.visualization.ColumnChart(document.getElementById('vote-chart'));
       chart.draw(data, chartOptions);
     });
   }
 
   return (
-      <div id="chart_div" ></div>
+      <div id="vote-chart" ></div>
   );
 };
 

@@ -14,6 +14,7 @@
     box-shadow: 9px 9px 20px dimgrey;
 
     transition: all 0.5s ease-in-out;
+    overflow-y: scroll;
 }
 
 .dd-canvas-nav {
@@ -28,6 +29,13 @@
 
 .dd-canvas-close {
     cursor: pointer;
+    background-color: #771F84;
+    color: white;
+    padding: .7rem 1.5rem;
+    box-shadow: 3px 3px 5px #000;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
 }
 
 @media (max-width: 700px) {

@@ -88,6 +88,9 @@ const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
           // after a successful vote, we need to show the results page
           setAlreadyVoted(true);
         });
+      } else {
+        setError("Cannot cast your vote, Please try again later..");
+        setIsLoading(false);
       }
       // we have to set the isLoading even if the result is ok or not too.
       setIsLoading(false);
@@ -124,6 +127,7 @@ const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
               id="ycp-team"
               value="ycp"
               disabled={alreadyVoted}
+              onChange={closeExpand}
           />
           <label className="team-card" htmlFor="ycp-team"
                  onClick={closeExpand}>
@@ -144,6 +148,7 @@ const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
               id="tjb-team"
               value="tjb"
               disabled={alreadyVoted}
+              onChange={(e) => {expandOptions()}}
           />
           <label
               className="team-card"
@@ -235,6 +240,7 @@ const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
               id="inc-team"
               value="inc"
               disabled={alreadyVoted}
+              onChange={closeExpand}
           />
           <label className="team-card" htmlFor="inc-team"
                  onClick={closeExpand}>

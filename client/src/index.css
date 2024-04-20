@@ -65,13 +65,13 @@ body {
   }
 }
 
-#chart_div {
+#vote-chart {
   width: max(500px, 60%);
   height: 500px;
 }
 
 @media only screen and (max-width: 500px) {
-  #chart_div {
+  #vote-chart {
     width: min(500px, 100%);
     height: min(400px, 50vh);
   }
