@@ -4,8 +4,8 @@ import DropDownCanvas, { closeCanvas } from "../components/DropDownCanvas.jsx";
 import { useState, useEffect } from "react";
 
 const HomePage = () => {
-  const [alreadyVoted, setAlreadyVoted] = useState(false);
-  const [onlyResults, setOnlyResults] = useState(false);
+  const [alreadyVoted, setAlreadyVoted] = useState(true);
+  const [onlyResults, setOnlyResults] = useState(true);
 
   useEffect(() => {
     const doc = JSON.parse(window.localStorage.getItem('doc'));

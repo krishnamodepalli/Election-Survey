@@ -1,7 +1,11 @@
 
-.idea
+.idea/
+.vscode/
 
 # My project files
 changes
 Tabs.*
 
+# env files
+**/*.env
+**/*.env.*

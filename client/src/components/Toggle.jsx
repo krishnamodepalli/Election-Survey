@@ -2,8 +2,9 @@ import './Toggle.css';
 
 const Toggle = ({leftLabel, rightLabel, onToggle = () => null}) => {
   const toggle = (event) => {
-    const target = event.target;
-    const parent = target.parentElement;
+    const parent = event.target;
+    const target = document.getElementsByClassName("toggler")[0];
+    console.log(target);
 
     parent.classList.toggle('left-enabled');
     parent.classList.toggle('right-enabled');
@@ -15,12 +16,12 @@ const Toggle = ({leftLabel, rightLabel, onToggle = () => null}) => {
     onToggle();
   }
   return (
-      <table className="toggle-wrapper">
+      <table className="toggle-wrapper" onClick={toggle}>
         <tbody>
         <tr>
           <td colSpan={2} align={"center"}>
             <div className="toggle-container left-enabled">
-              <div className="toggler toggle-left" onClick={toggle}></div>
+              <div className="toggler toggle-left"></div>
             </div>
           </td>
         </tr>

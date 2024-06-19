@@ -24,12 +24,11 @@ const SurveyForm = ({onlyResults, alreadyVoted, setAlreadyVoted}) => {
   // if the user already voted in this device
   useEffect(() => {
     if (alreadyVoted) {
-      setSuccessMsg("Thank you for  your valuable response. Please" +
-          " check out the results...");
-      setTelSuccessMsg("మీ విలువైన స్పందనకు ధన్యవాదాలు. దయచేసి ఫలితాలను చూడండి...");
-      if (!onlyResults)
-        setVoteTypeWarning("Please continue the survey, your vote will be" +
-            " considered verified, if not it will be counted anonymous");
+      setSuccessMsg("Voting has ended. Please check the results.");
+      setTelSuccessMsg("ఓటింగ్ ముగిసింది. దయచేసి ఫలితాలను తనిఖీ చేయండి.");
+    //   if (!onlyResults)
+    //     setVoteTypeWarning("Please continue the survey, your vote will be" +
+    //         " considered verified, if not it will be counted anonymous");
     }
   }, [alreadyVoted]);
 
